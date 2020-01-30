@@ -224,15 +224,19 @@ stateResult_t rvWeaponMachinegun::State_Fire ( const stateParms_t& parms ) {
 		STAGE_INIT,
 		STAGE_WAIT,
 	};	
+
+	// I am changing it so that more than 1 bullet comes out of the gun. makes it a burst weapon almost maybe
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			if ( wsfl.zoom ) {
 				nextAttackTime = gameLocal.time + (altFireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
-				Attack ( true, 1, spreadZoom, 0, 1.0f );
+				Attack ( true, 2, 3.3f, 0, 1.0f ); // the defualt of the 2nd parameter is 1 for when zoomed in
+														
 				fireHeld = true;
 			} else {
 				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
-				Attack ( false, 1, spread, 0, 1.0f );
+				Attack ( false, 3, 3.3f, 0, 2.0f );
+				// Attack ( false, 1, spread, 0, 1.0f );
 			}
 			PlayAnim ( ANIMCHANNEL_ALL, "fire", 0 );	
 			return SRESULT_STAGE ( STAGE_WAIT );
