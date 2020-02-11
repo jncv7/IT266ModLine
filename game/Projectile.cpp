@@ -34,7 +34,6 @@ CLASS_DECLARATION( idEntity, idProjectile )
 	EVENT( EV_RadiusDamage,		idProjectile::Event_RadiusDamage )
 	EVENT( EV_ResidualDamage,	idProjectile::Event_ResidualDamage )
 END_CLASS
-
 /*
 ================
 idProjectile::idProjectile

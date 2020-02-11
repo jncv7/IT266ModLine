@@ -72,6 +72,7 @@ typedef struct
 #endif
 // RAVEN END
 
+// a type def defines another type --> the only thing a computer works with by defualt is ints
 typedef enum {
 	FOCUS_NONE,
 	FOCUS_GUI,
@@ -84,6 +85,7 @@ typedef enum {
 	FOCUS_MAX
 } playerFocus_t;
 
+// a stuct is a block of data that is similar
 struct idItemInfo {
 	idStr name;
 	idStr icon;

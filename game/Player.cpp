@@ -222,6 +222,8 @@ void idInventory::Clear( void ) {
 
 	levelTriggers.Clear();
 
+
+	// no item pick ups
 	nextItemPickup = 0;
 	nextItemNum = 1;
 	onePickupTime = 0;
@@ -241,6 +243,8 @@ void idInventory::Clear( void ) {
 idInventory::GivePowerUp
 ==============
 */
+
+// make sure to look at this
 void idInventory::GivePowerUp( idPlayer *player, int powerup, int msec ) {
 	powerups |= 1 << powerup;
 	powerupEndTime[ powerup ] = msec == -1 ? -1 : (gameLocal.time + msec);
@@ -251,6 +255,9 @@ void idInventory::GivePowerUp( idPlayer *player, int powerup, int msec ) {
 idInventory::ClearPowerUps
 ==============
 */
+
+//make sure to look at this
+
 void idInventory::ClearPowerUps( void ) {
 	int i;
 	for ( i = 0; i < POWERUP_MAX; i++ ) {
