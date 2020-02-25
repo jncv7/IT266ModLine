@@ -20,7 +20,7 @@ public:
 	void				PostSave	( void );
 
 protected:
-
+	// by defualt the flash light is turned on
 	bool				UpdateAttack		( void );
 	bool				UpdateFlashlight	( void );
 	void				Flashlight			( bool on );
@@ -60,12 +60,16 @@ rvWeaponBlaster::rvWeaponBlaster ( void ) {
 rvWeaponBlaster::UpdateFlashlight
 ================
 */
+
+// this is refrshed as long as you hold the blaster
 bool rvWeaponBlaster::UpdateFlashlight ( void ) {
 	if ( !wsfl.flashlight ) {
+		// gameLocal.Printf("flash light on");
 		return false;
 	}
-	
+			
 	SetState ( "Flashlight", 0 );
+	// gameLocal.Printf("flash light off");
 	return true;		
 }
 
@@ -106,8 +110,12 @@ bool rvWeaponBlaster::UpdateAttack ( void ) {
 	if ( wsfl.attack && gameLocal.time >= nextAttackTime ) {
 		// Save the time which the fire button was pressed
 		if ( fireHeldTime == 0 ) {		
+			// gameLocal.Printf("shooting the gun");
+			// this is used when you left click the pistol
 			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
 			fireHeldTime   = gameLocal.time;
+		//	int timeStamp = gameLocal.time;			
+			//gameLocal.Printf("%d, %s", timeStamp , "s");		//printing time to console 
 			viewModel->SetShaderParm ( BLASTER_SPARM_CHARGEGLOW, chargeGlow[0] );
 		}
 	}		
@@ -270,6 +278,8 @@ stateResult_t rvWeaponBlaster::State_Lower ( const stateParms_t& parms ) {
 	};	
 	switch ( parms.stage ) {
 		case LOWER_INIT:
+			// gameLocal.Printf("You put the blaster away");
+			// this is where in the weapons files that the gun is put away. 
 			SetStatus ( WP_LOWERING );
 			PlayAnim( ANIMCHANNEL_ALL, "putaway", parms.blendFrames );
 			return SRESULT_STAGE(LOWER_WAIT);

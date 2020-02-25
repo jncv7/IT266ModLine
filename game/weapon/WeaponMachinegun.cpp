@@ -17,6 +17,8 @@ public:
 	void				Restore				( idRestoreGame *savefile );
 	void					PreSave				( void );
 	void					PostSave			( void );
+	int heal;
+	int healRate;
 
 protected:
 
@@ -168,7 +170,8 @@ stateResult_t rvWeaponMachinegun::State_Idle( const stateParms_t& parms ) {
 		STAGE_WAIT,
 	};	
 	switch ( parms.stage ) {
-		case STAGE_INIT:
+		case STAGE_INIT: // this decides the animation i guess
+			// if the weapon has no ammo, set that state, otherwise set the other state
 			if ( !AmmoAvailable ( ) ) {
 				SetStatus ( WP_OUTOFAMMO );
 			} else {
@@ -186,10 +189,11 @@ stateResult_t rvWeaponMachinegun::State_Idle( const stateParms_t& parms ) {
 			if ( UpdateFlashlight ( ) ) {
 				return SRESULT_DONE;
 			}
-
+			// so this is for the automatic trait of the gun
 			if ( fireHeld && !wsfl.attack ) {
 				fireHeld = false;
 			}
+			
 			if ( !clipSize ) {
 				if ( !fireHeld && gameLocal.time > nextAttackTime && wsfl.attack && AmmoAvailable ( ) ) {
 					SetState ( "Fire", 0 );
@@ -231,6 +235,7 @@ stateResult_t rvWeaponMachinegun::State_Fire ( const stateParms_t& parms ) {
 			if ( wsfl.zoom ) {
 				nextAttackTime = gameLocal.time + (altFireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
 				Attack ( true, 2, 3.3f, 0, 1.0f ); // the defualt of the 2nd parameter is 1 for when zoomed in
+				
 														
 				fireHeld = true;
 			} else {

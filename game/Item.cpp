@@ -602,9 +602,51 @@ bool idItem::GiveToPlayer( idPlayer *player ) {
 		}
 		return false;
 	} 
+	// note this is called once
+	gameLocal.Printf(name);
 
-	return player->GiveItem( this );
+	// you get quad damage with machinegun
+	if (idStr::Icmpn(name, "ammo_machinegun", 15) == 0){
+		gameLocal.Printf("You picked up machine gun ammo");
+		player->GivePowerUp(POWERUP_QUADDAMAGE, SEC2MS(10.0f));
+	}
+
+	if (idStr::Icmpn(name, "item_health_small_moveable", 26) == 0){
+		gameLocal.Printf("You picked up the small health pack");
+		player->GivePowerUp(POWERUP_REGENERATION, SEC2MS(11.0f));
+	}
+
+	
+	if (idStr::Icmpn(name, "moveable_item_machinegun", 24) == 0){
+		//player->GivePowerUp(POWERUP_HASTE, SEC2MS(10.0f));
+		gameLocal.Printf("You picked up the machine gun");
+	}
+	// test to see if the names are similar all over the place.
+
+	if (idStr::Icmpn(name, "moveable_item_shotgun", 21) == 0){
+		gameLocal.Printf("- You have picked up a shotgun -");
+		player->GivePowerUp(POWERUP_INVISIBILITY, SEC2MS(10.0f));
+	}
+
+	if (idStr::Icmpn(name, "moveable_item_railgun", 22) == 0){
+		gameLocal.Printf("You picked up the rail gun");
+		player->GivePowerUp(POWERUP_AMMOREGEN, SEC2MS(10.0f));
+		
+	}
+	
+	return player->GiveItem(this);
+
+	// make it so that when you pick up an item, you get a power up
+
+	
+
+	// items powerups here
+
 }
+
+
+
+
 
 /*
 ===============

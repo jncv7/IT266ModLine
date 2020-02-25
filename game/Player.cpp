@@ -330,6 +330,7 @@ void idInventory::GetPersistantData( idDict &dict ) {
 idInventory::RestoreInventory
 ==============
 */
+
 void idInventory::RestoreInventory( idPlayer *owner, const idDict &dict ) {
 	int			i;
 	int			num;
@@ -8481,6 +8482,9 @@ void idPlayer::PerformImpulse( int impulse ) {
 	bool updateVisuals = false;
 #endif
 //RAVEN END
+
+	// WOW LOOK AT ALL THESE IMPULSES --> learn them
+	// add different things like uh, the blaster would change into different things
 
 	switch( impulse ) {
 		case IMPULSE_13: {

@@ -226,11 +226,13 @@ public:
 
 							idInventory() { Clear(); }
 							~idInventory() { Clear(); }
+	
+
 
 	// save games
+							// try this for saving TIME
 	void					Save( idSaveGame *savefile ) const;					// archives object for save game file
 	void					Restore( idRestoreGame *savefile );					// unarchives object from save game file
-
 	void					Clear( void );
 	void					GivePowerUp( idPlayer* player, int powerup, int msec );
 	void					ClearPowerUps( void );
@@ -248,10 +250,10 @@ public:
 	bool					DetermineAmmoAvailability( idPlayer* owner, const char *ammoName, int ammoIndex, int ammoAmount, int ammoMax );
 // RAVEN END
 	
-	int						AmmoIndexForWeaponIndex( int weaponIndex );
-	int						StartingAmmoForWeaponIndex( int weaponIndex );
-	int						AmmoRegenStepForWeaponIndex( int weaponIndex );
-	int						AmmoRegenTimeForWeaponIndex( int weaponIndex );
+	int						AmmoIndexForWeaponIndex( int weaponIndex ); // looks for which weapon
+	int						StartingAmmoForWeaponIndex( int weaponIndex ); // determines the starting ammo
+	int						AmmoRegenStepForWeaponIndex( int weaponIndex ); // predetermined ammo regen?
+	int						AmmoRegenTimeForWeaponIndex( int weaponIndex );// predetermined ammo time?
 
 	int						HasAmmo( int index, int amount );
 	bool					UseAmmo( int index, int amount );
