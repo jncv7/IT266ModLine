@@ -58,8 +58,9 @@ const int HEALTH_PER_DOSE = 10;
 const int WEAPON_DROP_TIME = 20 * 1000;
 
 // time before a next or prev weapon switch happens
-const int	WEAPON_SWITCH_DELAY		= 150;
 
+// this is a buffer
+const int	WEAPON_SWITCH_DELAY		= 150;
 const float	PLAYER_ITEM_DROP_SPEED	= 100.0f;
 
 // how many units to raise spectator above default view height so it's in the head of someone
@@ -649,7 +650,7 @@ bool idInventory::DetermineAmmoAvailability( idPlayer* owner, const char *ammoNa
 	 if ( !idStr::Icmpn( ammoName, "start_ammo_", 11 ) ) {
 		realAmmoName.StripLeading( "start_" );
 	}
-	
+
 	// Find the entityDef for the weapon that uses this ammo.
 	for ( int i = 0; i < MAX_WEAPONS; i++ ) {
 
@@ -4284,6 +4285,8 @@ bool idPlayer::GiveItem( idItem *item ) {
 /*
 ===============
 idPlayer::PowerUpModifier
+
+// this is where the MODS or POWERUPS get their effects
 ===============
 */
 float idPlayer::PowerUpModifier( int type ) {
@@ -4306,17 +4309,52 @@ float idPlayer::PowerUpModifier( int type ) {
 		}
 	}
 
+
+	// if haste is active --> do these changes
+	// make it fire normal
+	// but make it that you move faster
+
 	if ( PowerUpActive( POWERUP_HASTE ) ) {
 		switch ( type ) {
-			case PMOD_SPEED:	
-				mod *= 1.3f;
-				break;
 
+			// this changes speed
+			case PMOD_SPEED:	
+				gameLocal.Printf(" --> The gun is changing your moving speed <---");
+				mod *= 1.5;
+				break;
+			
+			// and these changes firerate
 			case PMOD_FIRERATE:
-				mod *= 0.7f;
+				gameLocal.Printf(" --> You should be firing slowly! <--");
+				mod *= 1.5f;
 				break;
 		}
 	}
+
+	/*
+	// this is ripped of off haste
+	// custom --> finish this
+	// this will jsut make the fire rate slower
+	if (PowerUpActive ( POWERDOWN_SLOWFIRE)){
+		switch (type) {
+
+			// this changes speed
+			case PMOD_SPEED:
+			mod *= 1.3f;
+				// mod *= 1.0f;
+			break;
+
+			// and these changes firerate
+			case PMOD_FIRERATE:
+			mod *= 100.1f;
+			break;
+		}
+			
+
+	}
+	*/
+
+
 
 	// Arena CTF powerups
 	if( PowerUpActive( POWERUP_AMMOREGEN ) ) {
@@ -4696,6 +4734,8 @@ bool idPlayer::GivePowerUp( int powerup, int time, bool team ) {
 		
 		case POWERUP_QUADDAMAGE: {		
 			gameLocal.mpGame.ScheduleAnnouncerSound( AS_GENERAL_QUAD_DAMAGE, gameLocal.time, gameLocal.gameType == GAME_TOURNEY ? GetInstance() : -1 );
+			
+			
 			break;
 		}
 
@@ -4711,24 +4751,48 @@ bool idPlayer::GivePowerUp( int powerup, int time, bool team ) {
 		}
 		case POWERUP_HASTE: {
 			gameLocal.mpGame.ScheduleAnnouncerSound( AS_GENERAL_HASTE, gameLocal.time, gameLocal.gameType == GAME_TOURNEY ? GetInstance() : -1 );
+			
 			break;
 		}
 		case POWERUP_INVISIBILITY: {
 			gameLocal.mpGame.ScheduleAnnouncerSound( AS_GENERAL_INVISIBILITY, gameLocal.time, gameLocal.gameType == GAME_TOURNEY ? GetInstance() : -1 );
 			break;
 		}
-		case POWERUP_GUARD: {
+
+		case POWERUP_GUARD: { // this will actually not do this, but will just raise the max hp and armor by 50
 			nextHealthPulse = gameLocal.time + HEALTH_PULSE;
-			inventory.maxHealth = 200;
-			inventory.maxarmor = 200;
+			inventory.maxHealth = 150;
+			inventory.maxarmor = 150;
 
 			break;
 		}
+
+		// putting the custom made powerdown here
+
+		// rip your health
+		case POWERDOWN_DIEDIEDIE: {
+			inventory.maxHealth -= 20;
+			break;
+		}
+
+		// rip your armor
+
+		case POWERDOWN_NOARMOR4U: {
+			inventory.maxarmor -= 40;
+			break;
+		}
+
+
+
+
+
 		case POWERUP_SCOUT: {
-			inventory.armor = 0;
+			inventory.armor = 1;
 
 			break;
 		}
+		
+
 		case POWERUP_AMMOREGEN: {
 			if ( team && gameLocal.GetLocalPlayer() == this ) {
 				gameLocal.mpGame.ScheduleAnnouncerSound( AS_GENERAL_TEAM_AMMOREGEN, gameLocal.time, gameLocal.gameType == GAME_TOURNEY ? GetInstance() : -1 );
@@ -4741,6 +4805,8 @@ bool idPlayer::GivePowerUp( int powerup, int time, bool team ) {
 			}
 			break;
 		}
+		
+		
 //RITUAL BEGIN
 		case POWERUP_DEADZONE: {
 			if ( playClientEffects && this == gameLocal.GetLocalPlayer() ) {
@@ -5377,6 +5443,7 @@ void idPlayer::GiveItem( const char *itemname ) {
 			}
 		}
 	}
+
 
 	// spawn the item if the player is alive
 	if ( health > 0 && idStr::Icmp( itemname, "ammorefill" ) ) {
@@ -8743,11 +8810,12 @@ void idPlayer::EvaluateControls( void ) {
 
 /*
 ==============
-idPlayer::AdjustSpeed
+idPlayer::AdjustSpeed --> and the jump OMEGALUL
 ==============
 */
 void idPlayer::AdjustSpeed( void ) {
 	float speed;
+	float jumpHeight; // this was added by jncv
 
 	if ( spectating ) {
 		speed = pm_spectatespeed.GetFloat();
@@ -8759,17 +8827,131 @@ void idPlayer::AdjustSpeed( void ) {
 		bobFrac = 1.0f;
 		speed = pm_speed.GetFloat();
 	} else {
+		// the speed is something that is reliant on pm.walkspeed?
 		speed = pm_walkspeed.GetFloat();
 		bobFrac = 0.0f;
 	}
 
+	// this will change the speed based on the mod (like haste and stuff like that)
 	speed *= PowerUpModifier(PMOD_SPEED);
 
 	if ( influenceActive == INFLUENCE_LEVEL3 ) {
+		// ahh they change it here
 		speed *= 0.33f;
 	}
+	// i assume this is where the speed changes
 
-	physicsObj.SetSpeed( speed, pm_crouchspeed.GetFloat() );
+	// if the player is holding a gun, then change the speed ...
+	// use a flag or something?
+
+	// finish me!
+	// find a way for the game to know what gun is being held, and change the speed accordingly
+	// THIS WORKS
+	
+
+	/*
+		blaster = 0
+		shotgun = 2
+		machine gun = 1
+		g launche r= 4
+		rocket launcher = 6
+		railgun = 7
+		lighting gun = 8
+	*/
+
+	// if the gun fires fast, make the person slow and stand still
+	// if the gun fires slow, have it move a tad faster than blastr
+
+	// if the gun is a blaster move faster --> this should be the fastest way to move
+	if (currentWeapon == 0){
+		speed = 600.0f; // remember that speed is a float
+	}
+
+	// if the gun is a machine gun
+	// make then walk slower
+	// walk fast when scoped in
+	if (currentWeapon == 1){
+		speed = 10.0f;
+		// they have to scope in to move faster
+		pm_isZoomed.SetFloat(101.1f);
+		
+	}
+
+	// if the gun is a shotgun
+	if (currentWeapon == 2){
+		speed = 590.0f;
+		
+	}
+
+	// glauncher
+	if (currentWeapon == 4)
+	{
+		// jump really high --> normal is 48
+		pm_jumpheight.SetFloat(200.0f);
+		// cannot move when they shoot a bomb --> normal is 160
+		speed = 10.1f;
+
+	}
+
+	//rocket luancher
+	if (currentWeapon == 6){
+		// cannot move
+		// cannot jump
+		speed = 1.1f;
+		jumpHeight = 0.1f;
+
+	}
+
+	// lighting gun
+	if (currentWeapon == 8){
+		// move really fast like .. too fast
+		speed = 900.3f;
+		// jump too high ... its like you got too sensitive KEK
+		jumpHeight = 200.1f;
+	}
+
+
+
+
+	// the speed will then be put onto the playerrrrrrrrrr!
+	// jump will be applied too!
+
+	physicsObj.SetSpeed(speed, pm_crouchspeed.GetFloat());
+	physicsObj.SetMaxJumpHeight(jumpHeight);
+
+
+
+
+
+	// -------------------------------------------------------------------------------
+	// this will change the jumping ablilty
+	// make is so that some guns cannot let you jump
+	/*
+	================
+	idPhysics_Player::SetMaxJumpHeight
+	================
+	
+	void idPhysics_Player::SetMaxJumpHeight(const float newMaxJumpHeight) {
+		maxJumpHeight = newMaxJumpHeight;
+	}
+
+	*/
+
+	
+
+
+
+	
+
+
+
+
+
+
+	
+	
+
+	
 }
 
 /*
@@ -12918,6 +13100,11 @@ void idPlayer::ToggleFlashlight ( void ) {
 // RAVEN END
 
 	int flashlightWeapon = currentWeapon;
+	 gameLocal.Printf("%d", currentWeapon);
+	/*
+		each gun has a number associated it with
+	*/
+	// gameLocal.Printf("gunname: %d", currentWeapon);
 	if ( !spawnArgs.GetBool( va( "weapon%d_flashlight", flashlightWeapon ) ) ) {
 		// TODO: find the first flashlight weapon that has ammo starting at the bottom
 		for( flashlightWeapon = MAX_WEAPONS - 1; flashlightWeapon >= 0; flashlightWeapon-- ) {

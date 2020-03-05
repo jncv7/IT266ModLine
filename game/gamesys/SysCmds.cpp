@@ -497,6 +497,7 @@ void GiveStuffToPlayer( idPlayer* player, const char* name, const char* value )
 		return;
 	}
 
+
 	if (idStr::Icmp(name, "ammoregen") == 0) {
 		player->GivePowerUp( POWERUP_AMMOREGEN, -1 );
 		return;

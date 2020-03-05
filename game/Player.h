@@ -120,11 +120,11 @@ typedef struct {
 // powerups
 enum {
 	// standard powerups
-	POWERUP_QUADDAMAGE = 0, 
+	POWERUP_QUADDAMAGE = 0,
 	POWERUP_HASTE,
 	POWERUP_REGENERATION,
 	POWERUP_INVISIBILITY,
-		
+
 	// ctf powerups
 	POWERUP_CTF_MARINEFLAG,
 	POWERUP_CTF_STROGGFLAG,
@@ -135,6 +135,20 @@ enum {
 	POWERUP_GUARD,
 	POWERUP_DOUBLER,
 	POWERUP_SCOUT,	// == 1.2 / protocol 69's POWERUP_MAX-1
+
+	// custom powerups made by jncv
+	//debuff, debuffs
+	POWERDOWN_SLOW,
+	POWERDOWN_SLOWFIRE,
+	POWERDOWN_RANDMOVE,
+	POWERDOWN_STOPMOVE,
+	POWERDOWN_DIEDIEDIE,
+	POWERDOWN_NOARMOR4U,
+
+
+	
+
+
 
 	POWERUP_MODERATOR, // Note: This has to be here.  Otherwise, it breaks syncronization with some list elsewhere
 		
@@ -192,6 +206,9 @@ typedef enum {
 
 const int	ASYNC_PLAYER_TOURNEY_STATUS_BITS = idMath::BitsForInteger( PTS_NUM_STATES );
 
+
+// these are the things that the character 
+// can have in their inventory
 class idInventory {
 public:
 	int						maxHealth;
@@ -207,6 +224,12 @@ public:
 	int						clip[ MAX_WEAPONS ];
 	int						powerupEndTime[ POWERUP_MAX ];
 	int						weaponMods[ MAX_WEAPONS ];
+
+	// these are the custom changes
+	// change 
+	int						weights; // use this number to make the player slower
+	int						slowerTriggerFinger; // use this number to make a gun shoot slower (namely the blaster)
+	
 
  	// multiplayer
  	int						ammoPredictTime;
@@ -293,6 +316,16 @@ public:
 	bool					godmode;
 	int						godmodeDamage;
 	bool					undying;
+
+	// make some new variables
+	// indicates when one of these bad bois gets picked up
+	// no need for theses, but it was a good idea
+	bool					isBLASTER;
+	bool					isMACHINEGUN;
+	bool					isSHOTGUN;
+	bool					isRAILGUN;
+	bool					isGLAUNCHER;
+	bool					isRLUANCHER;
 
 	bool					spawnAnglesSet;		// on first usercmd, we must set deltaAngles
 	idAngles				spawnAngles;

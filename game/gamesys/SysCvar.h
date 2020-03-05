@@ -206,6 +206,12 @@ extern idCVar	pm_speed;
 extern idCVar	pm_walkspeed;
 extern idCVar	pm_zoomedSlow;
 extern idCVar 	pm_isZoomed;
+
+// this isnt used never mind
+// weaponSpeed --> this is for the speed that the player has when they hold a weapon
+//extern idCVar   pm_holdsWeapon;
+
+
 // RAVEN END
 extern idCVar	pm_noclipspeed;
 extern idCVar	pm_spectatespeed;
@@ -256,7 +262,9 @@ extern idCVar pm_ThumbstickConfig;
 extern idCVar pm_ButtonConfig;
 
 extern idCVar pm_RocketJumpAutocenter;
-extern idCVar pm_IAmACheater;
+
+// WHAT IS THIS HMMMMMMMM
+extern idCVar pm_IAmACheater; 
 
 
 #endif

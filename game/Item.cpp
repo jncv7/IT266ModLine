@@ -603,44 +603,108 @@ bool idItem::GiveToPlayer( idPlayer *player ) {
 		return false;
 	} 
 	// note this is called once
-	gameLocal.Printf(name);
+	// this shows the name of the pick up
+
+	/*
+	* The names are for the ammo 
+	--> clips are ammo_machinegun
+	--> for health packs it is item_<armor/health>_<size>_moveable
+	--> for the guns it is indifferent to the actual gun itself --> moveable_item_machinegun
+	*/
+	
+	//finding names of items
+	gameLocal.Printf(" ----> ");  gameLocal.Printf(name); gameLocal.Printf(" <---- ");
 
 	// you get quad damage with machinegun
+
+	// machine gun ammo changes
+	// move slower
 	if (idStr::Icmpn(name, "ammo_machinegun", 15) == 0){
 		gameLocal.Printf("You picked up machine gun ammo");
-		player->GivePowerUp(POWERUP_QUADDAMAGE, SEC2MS(10.0f));
+		// the default speed is 160
+		
+		player->GivePowerUp(POWERUP_DOUBLER, SEC2MS(5.0f));
 	}
-
-	if (idStr::Icmpn(name, "item_health_small_moveable", 26) == 0){
-		gameLocal.Printf("You picked up the small health pack");
-		player->GivePowerUp(POWERUP_REGENERATION, SEC2MS(11.0f));
-	}
-
 	
+	// small health boost changes
+	// kills max hp
+	if (idStr::Icmpn(name, "item_health_small_moveable", 26) == 0){
+		gameLocal.Printf(" - You picked up a small health boost - ");
+		 player->GivePowerUp(POWERDOWN_DIEDIEDIE, SEC2MS(1.0f));
+	}
+
+	// large health boost changes
+	// move a tad faster
+	if (idStr::Icmpn(name, "item_health_large_moveable", 26) == 0){
+		gameLocal.Printf(" - You picked up a large health boost -");
+		player->GivePowerUp(POWERUP_REGENERATION, SEC2MS(5.0f));
+	}
+
+	// small armor boost changes
+	// kills max armor
+	if (idStr::Icmpn(name, "item_armor_small_moveable", 25) == 0){
+		gameLocal.Printf("  -You picked up a small armor boost - ");
+		player->GivePowerUp(POWERDOWN_NOARMOR4U, SEC2MS(3.0f));
+	}
+
+	// large armor boost changes
+	// drop armor to zero
+	// but you move fast
+	// good luck you glass cannon
+
+	if (idStr::Icmpn(name, "item_armor_large_moveable", 25) == 0){
+		gameLocal.Printf("- You picked up a large armor boost -");
+		player->GivePowerUp(POWERUP_SCOUT, SEC2MS(5.0f));
+	}
+
+	// --------------------------------------------------------------------
+
+
+	/// organize the weapon stat changes 
+
+	// machine gun
+
 	if (idStr::Icmpn(name, "moveable_item_machinegun", 24) == 0){
 		//player->GivePowerUp(POWERUP_HASTE, SEC2MS(10.0f));
+		//player->GivePowerUp(POWERUP_HASTE, SEC2MS(5.0f)); // nerf the firing rate of dis gunS
 		gameLocal.Printf("You picked up the machine gun");
 	}
-	// test to see if the names are similar all over the place.
 
+	// shot gun
 	if (idStr::Icmpn(name, "moveable_item_shotgun", 21) == 0){
 		gameLocal.Printf("- You have picked up a shotgun -");
-		player->GivePowerUp(POWERUP_INVISIBILITY, SEC2MS(10.0f));
+		//player->GivePowerUp(POWERDOWN_SLOW, SEC2MS(5.0f));
+	//	player->GivePowerUp(POWERUP_INVISIBILITY, SEC2MS(10.0f));
 	}
 
+	// railgun
+
 	if (idStr::Icmpn(name, "moveable_item_railgun", 22) == 0){
-		gameLocal.Printf("You picked up the rail gun");
-		player->GivePowerUp(POWERUP_AMMOREGEN, SEC2MS(10.0f));
-		
+		gameLocal.Printf("- You picked up the rail gun -");
+	//	player->GivePowerUp(POWERUP_AMMOREGEN, SEC2MS(10.0f));
+
 	}
+
+	// grenade launcher
+
+	if (idStr::Icmpn(name, "moveable_item_grenadelauncher", 22) == 0){
+		gameLocal.Printf(" - You picked up the bomber man - ");
+	//	player->GivePowerUp(POWERUP_AMMOREGEN, SEC2MS(10.0f));
+
+	}
+
+	//rocket laucnher
+
+	if (idStr::Icmpn(name, "moveable_item_rocketlauncher", 22) == 0){
+		gameLocal.Printf(" - You picked up the cooler bomber man - ");
+	//	player->GivePowerUp(POWERUP_AMMOREGEN, SEC2MS(10.0f));
+
+	}
+
+
 	
 	return player->GiveItem(this);
 
-	// make it so that when you pick up an item, you get a power up
-
-	
-
-	// items powerups here
 
 }
 
