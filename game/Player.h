@@ -883,6 +883,10 @@ private:
 	int						weaponSwitchTime;
 	bool					weaponEnabled;
  	bool					showWeaponViewModel;
+	// jncv7
+	int							bestTime;
+	int							savedStartTime;
+	int							savedStopTime;
 
 	rvClientEntityPtr<rvClientAFAttachment>	clientHead;
 // RAVEN BEGIN

@@ -20,6 +20,7 @@
 
 
 #include <stdio.h> // this was added jncv7
+//#include <string> // this was added jncv7
 
 // RAVEN BEGIN
 // nrausch: support for turning the weapon change ui on and off
@@ -125,6 +126,12 @@ const idEventDef EV_Player_DisableObjectives( "disableObjectives" );
 const idEventDef EV_Player_AllowNewObjectives( "<allownewobjectives>" );
 
 // RAVEN END
+
+///////////// jncv7 custom 
+
+//int bestTime; // this will hold the value of the difference of startTime and stopTime
+//int savedStartTime ; // start time when the toggle is activated
+//int savedStopTime ; // a stop time when toggle is decativated
 
 CLASS_DECLARATION( idActor, idPlayer )
 //	EVENT( EV_Player_HideDatabaseEntry,		idPlayer::Event_HideDatabaseEntry )
@@ -1193,6 +1200,9 @@ idPlayer::idPlayer() {
 	weaponEnabled			= true;
  	showWeaponViewModel		= true;
 	oldInventoryWeapons		= 0;
+	bestTime = 0;
+	savedStartTime = 0;
+	savedStopTime = 0;
 
 // RAVEN BEGIN
 // mekberg: allow disabling of objectives during non-cinematic time periods
@@ -3400,12 +3410,18 @@ void idPlayer::UpdateHudAmmo( idUserInterface *_hud ) {
 /*
 ===============
 idPlayer::UpdateHudStats
+
+
+jncv7
 ===============
 */
 void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	int temp;
-	
+
 	assert ( _hud );
+
+
+
 
 	temp = _hud->State().GetInt ( "player_health", "-1" );
 	if ( temp != health ) {		
@@ -3450,7 +3466,16 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	if ( weapon ) {
 		UpdateHudAmmo( _hud );
 	}
-	
+	// jncv7
+
+	// best time is the difference of the start and stop time 
+
+	bestTime = savedStopTime - savedStartTime;
+
+	char buff[100];
+	sprintf_s(buff, "time: %i", bestTime);
+	_hud->SetStateString("player_bestTime", buff);
+
 	_hud->StateChanged( gameLocal.time );
 }
 
@@ -8577,11 +8602,14 @@ void idPlayer::PerformImpulse( int impulse ) {
 			// change the start time into a time that is secs
 
 			int convertedTime = startTime / 1000;
+		//	savedStartTime = convertedTime;
 		//	gameLocal.Printf("This is the start time: ");
 		//	gameLocal.Printf("%d", startTime);
 
 			gameLocal.Printf(" The is the converted time: -->");
 			gameLocal.Printf("%d", convertedTime);
+
+			savedStartTime = convertedTime;
 
 			// there is a new comment here
 
@@ -8591,7 +8619,7 @@ void idPlayer::PerformImpulse( int impulse ) {
 			FILE * pFile;
 
 			// make a file to write
-			pFile = fopen("startTime.txt", "w+");
+			pFile = fopen("startTime.txt", "r+");
 
 			// write the number in there
 			fprintf(pFile, "%i", convertedTime);
@@ -8606,7 +8634,8 @@ void idPlayer::PerformImpulse( int impulse ) {
 
 			///////////////////////////////////////////////////
 
-
+			////////calculate BestTime
+			
 
 			// if( gameLocal.isServer && spectating && gameLocal.gameType == GAME_TOURNEY ) {	
 			//	((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->SpectateCycleNext( this );
@@ -8614,42 +8643,45 @@ void idPlayer::PerformImpulse( int impulse ) {
 			break;
 		}
 		case IMPULSE_15: {
-			//PrevWeapon();
-			gameLocal.Printf("This is impulse 15 \n");
-			//This is to take the ending time --> also, calc the time here
-			int stopTime = gameLocal.time;
-			int convertedTime = stopTime / 1000;
+								
+							 // get the time 
 
-			//////////////////////////////////////////////////
+							 int stopTime = gameLocal.time;
 
-			// this is saving the stop start time to one file jncv7
-
-			FILE * pFile;
-			
-			// make a file to write
-			pFile = fopen("stopTime.txt","w+");
-
-			// write the number in there
-			fprintf(pFile, "%i", convertedTime);
+							// convert the time over 1000
+							 int newTime = stopTime / 1000;
+							 savedStopTime = newTime;
 
 
-			gameLocal.Printf("Stop Time has been saved");
-			fclose(pFile);
+							 // how put it into a file
+
+							 FILE * pFile;
+							 
+							 pFile = fopen("stopTime.txt", "r+");
+
+							 // if the file has a thing inside of it, go to the next line and write there
 
 
 
 
+							fprintf(pFile, "%i", newTime);
+
+
+							fclose(pFile);
+
+							
 
 
 
 
-			//if( gameLocal.isServer && spectating && gameLocal.gameType == GAME_TOURNEY ) {	
-			//	((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->SpectateCyclePrev( this );
-			//}
+
+
+
+		
 			break;
 		}
 		case IMPULSE_17: {
-			gameLocal.Printf("This is impulse 17");
+		//	gameLocal.Printf("This is impulse 17");
  			if ( gameLocal.isClient || entityNumber == gameLocal.localClientNum ) {
  				gameLocal.mpGame.ToggleReady( );
 			}
@@ -8722,6 +8754,32 @@ void idPlayer::PerformImpulse( int impulse ) {
 			idFuncRadioChatter::RepeatLast();
 			break;
 		}
+	/*	case IMPULSE_111: {// jncv7
+
+
+							  int savedStartTime = 0 ;
+							  int savedStopTime = 0;
+							  int bestTime = savedStopTime - savedStartTime;
+							  // have it look at the numbers that are inside of the file and get the difference of those numbers
+							  gameLocal.Printf("THIS IS IMPULSE 111");
+							  FILE * startFile;
+							  FILE * endFile;
+							  // look at files
+
+							  startFile = fopen("startTime.txt","r+"); // starttime and stoptime
+							  endFile = fopen("endTime.txt","r+");
+
+							  fscanf(startFile,"%i", savedStartTime);
+							  fscanf(endFile,"%i", savedStopTime);
+
+							  fclose(startFile);
+							  fclose(endFile);
+
+							  gameLocal.Printf("%i", bestTime);
+							  
+
+							 break;
+		}*/
 
 // RITUAL BEGIN
 // squirrel: Mode-agnostic buymenus
