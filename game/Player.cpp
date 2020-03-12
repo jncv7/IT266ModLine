@@ -3472,6 +3472,11 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 
 	bestTime = savedStopTime - savedStartTime;
 
+	// do not show negative time
+	if (bestTime < 0){
+		bestTime = 0;
+	}
+
 	char buff[100];
 	sprintf_s(buff, "time: %i", bestTime);
 	_hud->SetStateString("player_bestTime", buff);
