@@ -620,10 +620,10 @@ bool idItem::GiveToPlayer( idPlayer *player ) {
 	// machine gun ammo changes
 	// move slower
 	if (idStr::Icmpn(name, "ammo_machinegun", 15) == 0){
-		gameLocal.Printf("You picked up machine gun ammo");
-		// the default speed is 160
+		// gameLocal.Printf("You picked up machine gun ammo");
+	// the default speed is 160
 		
-		player->GivePowerUp(POWERUP_DOUBLER, SEC2MS(5.0f));
+		player->GivePowerUp(POWERUP_DOUBLER, SEC2MS(3.0f));
 	}
 	
 	// small health boost changes
@@ -655,6 +655,11 @@ bool idItem::GiveToPlayer( idPlayer *player ) {
 	if (idStr::Icmpn(name, "item_armor_large_moveable", 25) == 0){
 		gameLocal.Printf("- You picked up a large armor boost -");
 		player->GivePowerUp(POWERUP_SCOUT, SEC2MS(5.0f));
+
+
+
+	
+
 	}
 
 	// --------------------------------------------------------------------

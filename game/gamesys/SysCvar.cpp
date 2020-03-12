@@ -340,14 +340,14 @@ idCVar rb_showContacts(				"rb_showContacts",			"0",			CVAR_GAME | CVAR_BOOL, "s
 // RAVEN END
 
 // The default values for player movement cvars are set in def/player.def
-// ----------------------------- change these based on the gun?
+// ----------------------------- change these based on the gun? --> find it in player.cpp --? adjust speed
 
 idCVar pm_jumpheight(				"pm_jumpheight",			"48",			CVAR_GAME | CVAR_NETWORKSYNC | CVAR_FLOAT | CVAR_NORESET, "approximate hieght the player can jump" );
 idCVar pm_stepsize(					"pm_stepsize",				"16",			CVAR_GAME | CVAR_NETWORKSYNC | CVAR_FLOAT | CVAR_NORESET, "maximum height the player can step up without jumping" );
 idCVar pm_crouchspeed(				"pm_crouchspeed",			"80",			CVAR_GAME | CVAR_NETWORKSYNC | CVAR_FLOAT | CVAR_NORESET, "speed the player can move while crouched" );
 // RAVEN BEGIN
 
-// --------------------------- look for a way to modify these values!!!!!!!!!!!!!!!!!!!!!!!!
+// --------------------------- look for a way to modify these value!! -> you can use the .set and .get for these! look at their values tho. some are int, float etc.
 idCVar pm_speed(					"pm_speed",					"160",			CVAR_GAME | CVAR_NETWORKSYNC | CVAR_FLOAT | CVAR_NORESET, "speed the player can move while running" );
 idCVar pm_walkspeed(				"pm_walkspeed",				"80",			CVAR_GAME | CVAR_NETWORKSYNC | CVAR_FLOAT | CVAR_NORESET, "speed the player can move while walking" );
 // idCVar pm_holdsWeapon(				"pm_walkspeed",				"100",			CVAR_GAME | CVAR_NETWORKSYNC | CVAR_FLOAT | CVAR_NORESET, "speed the player can move while walking but holding a gun");

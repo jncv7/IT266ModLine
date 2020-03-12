@@ -18,6 +18,9 @@
 #include "Healing_Station.h"
 #include "ai/AI_Medic.h"
 
+
+#include <stdio.h> // this was added jncv7
+
 // RAVEN BEGIN
 // nrausch: support for turning the weapon change ui on and off
 #ifdef _XENON
@@ -47,6 +50,9 @@ idCVar net_showPredictionError( "net_showPredictionError", "-1", CVAR_INTEGER | 
 #ifdef _XENON
 bool g_ObjectiveSystemOpen = false;
 #endif
+
+
+// custom c
 
 // distance between ladder rungs (actually is half that distance, but this sounds better)
 const int LADDER_RUNG_DISTANCE = 32;
@@ -4319,13 +4325,13 @@ float idPlayer::PowerUpModifier( int type ) {
 
 			// this changes speed
 			case PMOD_SPEED:	
-				gameLocal.Printf(" --> The gun is changing your moving speed <---");
+			//	gameLocal.Printf(" --> The gun is changing your moving speed <---");
 				mod *= 1.5;
 				break;
 			
 			// and these changes firerate
 			case PMOD_FIRERATE:
-				gameLocal.Printf(" --> You should be firing slowly! <--");
+				// gameLocal.Printf(" --> You should be firing slowly! <--");
 				mod *= 1.5f;
 				break;
 		}
@@ -4366,6 +4372,7 @@ float idPlayer::PowerUpModifier( int type ) {
 		}
 	}
 
+	// this will double the player's power
 	if( PowerUpActive( POWERUP_DOUBLER ) ) {
 		switch( type ) {
 			case PMOD_PROJECTILE_DAMAGE: {
@@ -4771,7 +4778,7 @@ bool idPlayer::GivePowerUp( int powerup, int time, bool team ) {
 
 		// rip your health
 		case POWERDOWN_DIEDIEDIE: {
-			inventory.maxHealth -= 20;
+			inventory.maxHealth = inventory.maxHealth - 40;
 			break;
 		}
 
@@ -4788,7 +4795,6 @@ bool idPlayer::GivePowerUp( int powerup, int time, bool team ) {
 
 		case POWERUP_SCOUT: {
 			inventory.armor = 1;
-
 			break;
 		}
 		
@@ -8556,23 +8562,94 @@ void idPlayer::PerformImpulse( int impulse ) {
 	switch( impulse ) {
 		case IMPULSE_13: {
 			Reload();
+			// gameLocal.Printf("This is the r key --> ");
+			// this is the case for reloading
+			// gameLocal.Printf("You have reloaded.");
+
 			break;
 		}
 		case IMPULSE_14: {
-			NextWeapon();
-			if( gameLocal.isServer && spectating && gameLocal.gameType == GAME_TOURNEY ) {	
-				((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->SpectateCycleNext( this );
-			}
+			// NextWeapon();
+			// 	gameLocal.Printf("This is impulse 14");
+			// this is to take the starting number
+			int startTime = gameLocal.time;
+
+			// change the start time into a time that is secs
+
+			int convertedTime = startTime / 1000;
+		//	gameLocal.Printf("This is the start time: ");
+		//	gameLocal.Printf("%d", startTime);
+
+			gameLocal.Printf(" The is the converted time: -->");
+			gameLocal.Printf("%d", convertedTime);
+
+			// there is a new comment here
+
+			///////////////////////////////////////////////////
+			// jncv7
+
+			FILE * pFile;
+
+			// make a file to write
+			pFile = fopen("startTime.txt", "w+");
+
+			// write the number in there
+			fprintf(pFile, "%i", convertedTime);
+
+
+			gameLocal.Printf("start Time has been saved");
+			fclose(pFile);
+
+
+
+
+
+			///////////////////////////////////////////////////
+
+
+
+			// if( gameLocal.isServer && spectating && gameLocal.gameType == GAME_TOURNEY ) {	
+			//	((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->SpectateCycleNext( this );
+			//}
 			break;
 		}
 		case IMPULSE_15: {
-			PrevWeapon();
-			if( gameLocal.isServer && spectating && gameLocal.gameType == GAME_TOURNEY ) {	
-				((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->SpectateCyclePrev( this );
-			}
+			//PrevWeapon();
+			gameLocal.Printf("This is impulse 15 \n");
+			//This is to take the ending time --> also, calc the time here
+			int stopTime = gameLocal.time;
+			int convertedTime = stopTime / 1000;
+
+			//////////////////////////////////////////////////
+
+			// this is saving the stop start time to one file jncv7
+
+			FILE * pFile;
+			
+			// make a file to write
+			pFile = fopen("stopTime.txt","w+");
+
+			// write the number in there
+			fprintf(pFile, "%i", convertedTime);
+
+
+			gameLocal.Printf("Stop Time has been saved");
+			fclose(pFile);
+
+
+
+
+
+
+
+
+			//if( gameLocal.isServer && spectating && gameLocal.gameType == GAME_TOURNEY ) {	
+			//	((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->SpectateCyclePrev( this );
+			//}
 			break;
 		}
 		case IMPULSE_17: {
+			gameLocal.Printf("This is impulse 17");
  			if ( gameLocal.isClient || entityNumber == gameLocal.localClientNum ) {
  				gameLocal.mpGame.ToggleReady( );
 			}
@@ -8811,11 +8888,14 @@ void idPlayer::EvaluateControls( void ) {
 /*
 ==============
 idPlayer::AdjustSpeed --> and the jump OMEGALUL
+CUSTOM
+CHANGES
+SPEED AND JUMP
 ==============
 */
 void idPlayer::AdjustSpeed( void ) {
 	float speed;
-	float jumpHeight; // this was added by jncv
+	float jumpHeight = 48; // this was added by jncv
 
 	if ( spectating ) {
 		speed = pm_spectatespeed.GetFloat();
@@ -8937,21 +9017,17 @@ void idPlayer::AdjustSpeed( void ) {
 
 	*/
 
-	
+
+	// if the gun that is being held is the pistol blaster and the flashlight is turned on 
+	// -------------------------
+
+	// if the flash light is turned on
+	//if (flashlightOn)
 
 
 
-	
 
 
-
-
-
-
-	
-	
-
-	
 }
 
 /*
@@ -9492,6 +9568,13 @@ void idPlayer::Think( void ) {
 			}
 		}
 	}
+
+
+
+
+	
+
+
 
 	if ( !gameLocal.usercmds ) {
 		return;
@@ -13100,15 +13183,22 @@ void idPlayer::ToggleFlashlight ( void ) {
 // RAVEN END
 
 	int flashlightWeapon = currentWeapon;
-	 gameLocal.Printf("%d", currentWeapon);
+
+	// SaveGame();
+
+	/// gameLocal.Printf("%d", currentWeapon);
 	/*
 		each gun has a number associated it with
 	*/
+
 	// gameLocal.Printf("gunname: %d", currentWeapon);
 	if ( !spawnArgs.GetBool( va( "weapon%d_flashlight", flashlightWeapon ) ) ) {
 		// TODO: find the first flashlight weapon that has ammo starting at the bottom
+
+		// this cycles through the weapons
 		for( flashlightWeapon = MAX_WEAPONS - 1; flashlightWeapon >= 0; flashlightWeapon-- ) {
 			if ( inventory.weapons & ( 1 << flashlightWeapon ) ) {
+				// if the weapon is good to go and it has a flash light
 				const char *weap = spawnArgs.GetString( va( "def_weapon%d", flashlightWeapon ) );
 				int			ammo = inventory.ammo[inventory.AmmoIndexForWeaponClass ( weap ) ];
 
@@ -13283,6 +13373,8 @@ void idPlayer::SetInitialHud ( void ) {
 	if ( !mphud || !gameLocal.isMultiplayer || gameLocal.GetLocalPlayer() != this ) {
 		return;
 	}
+
+	
 
 	mphud->SetStateInt( "gametype", gameLocal.gameType );
 
@@ -14273,6 +14365,15 @@ int idPlayer::CanSelectWeapon(const char* weaponName)
 	}
 
 	return weaponNum;
+
+
+
+
+
+
+
 }
+
+
 
 // RITUAL END
