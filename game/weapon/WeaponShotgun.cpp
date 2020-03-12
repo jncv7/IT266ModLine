@@ -123,8 +123,13 @@ stateResult_t rvWeaponShotgun::State_Idle( const stateParms_t& parms ) {
 			return SRESULT_STAGE ( STAGE_WAIT );
 		
 		case STAGE_WAIT:			
+
+			// lower weapon is to put away weapon
 			if ( wsfl.lowerWeapon ) {
 				SetState( "Lower", 4 );
+
+
+
 				return SRESULT_DONE;
 			}		
 			if ( !clipSize ) {

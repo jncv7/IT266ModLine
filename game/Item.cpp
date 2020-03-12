@@ -630,7 +630,7 @@ bool idItem::GiveToPlayer( idPlayer *player ) {
 	// kills max hp
 	if (idStr::Icmpn(name, "item_health_small_moveable", 26) == 0){
 		gameLocal.Printf(" - You picked up a small health boost - ");
-		 player->GivePowerUp(POWERDOWN_DIEDIEDIE, SEC2MS(1.0f));
+		 player->GivePowerUp(POWERUP_AMMOREGEN, SEC2MS(5.0f));
 	}
 
 	// large health boost changes
@@ -644,7 +644,7 @@ bool idItem::GiveToPlayer( idPlayer *player ) {
 	// kills max armor
 	if (idStr::Icmpn(name, "item_armor_small_moveable", 25) == 0){
 		gameLocal.Printf("  -You picked up a small armor boost - ");
-		player->GivePowerUp(POWERDOWN_NOARMOR4U, SEC2MS(3.0f));
+		player->GivePowerUp(POWERUP_SCOUT, SEC2MS(3.0f));
 	}
 
 	// large armor boost changes
@@ -654,7 +654,7 @@ bool idItem::GiveToPlayer( idPlayer *player ) {
 
 	if (idStr::Icmpn(name, "item_armor_large_moveable", 25) == 0){
 		gameLocal.Printf("- You picked up a large armor boost -");
-		player->GivePowerUp(POWERUP_SCOUT, SEC2MS(5.0f));
+		player->GivePowerUp(POWERUP_QUADDAMAGE, SEC2MS(5.0f));
 
 
 
@@ -662,7 +662,7 @@ bool idItem::GiveToPlayer( idPlayer *player ) {
 
 	}
 
-	// --------------------------------------------------------------------
+	// -------------------------jncv7 -------------------------------------------
 
 
 	/// organize the weapon stat changes 

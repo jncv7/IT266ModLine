@@ -150,6 +150,10 @@ public:
 	byte		flags;							// additional flags
 	int			sequence;						// just for debugging
 
+	// oh boi i can do the condusion thingy
+
+
+
 public:
 	void		ByteSwap();						// on big endian systems, byte swap the shorts and ints
 	bool		operator==( const usercmd_t &rhs ) const;

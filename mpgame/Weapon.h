@@ -236,6 +236,13 @@ public:
 	void				EnterCinematic				( void );
 	void				ExitCinematic				( void );
 
+	// THESE ARE TO CHECK IF THE PLAYER HAS A GUN
+	bool		hasMachineGun;
+	bool		hasRailGun;
+	bool		hasRocketLauncher;
+	bool		hasGrenadeLauncher;
+	bool		hasBlaster; // this would be defualt tho;
+
 protected:
 
 	virtual void		OnLaunchProjectile			( idProjectile* proj );
@@ -431,6 +438,8 @@ private:
 
 	// multiplayer hitscans
 	int						hitscanAttackDef;
+
+
 
 	CLASS_STATES_PROTOTYPE ( rvWeapon );
 };

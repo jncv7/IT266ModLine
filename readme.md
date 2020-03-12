@@ -16,15 +16,16 @@ Here are the changes to the game:
         *shot gun --> you move sorta fast, but it makes it hard to stop and aim well
 
     2. pick ups (5) have different effects that can help or hurt you!
-        * small health pickups --> lowers max hp --> does not stack
-        * small armor pickups --> lowers max amor --> does not stack
+        * small health pickups --> armor regen
+        * small armor pickups --> glass cannon
         * large health pickups --> small health regen
-        * large armor pickups --> you become a glass cannon
+        * large armor pickups --> you become a glass cannon --> careful (4x DMG)
         * machine gun ammo --> grant double damage for 3 seconds  
 
     3. your primary guns are you abilities are on different keys --> find them through the game.
         * your blaster is 1 and is weak just like Mega Man's Blaster --> but you are fastest when holding it
         * bomber man abilites are 2 and 3 (g and r luanchers)
+            * make sure to check the settings for the gun binding!
 
     4. there is a start time and a stop time clock
         * click [ to begin the clock

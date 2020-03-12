@@ -183,6 +183,7 @@ stateResult_t rvWeaponMachinegun::State_Idle( const stateParms_t& parms ) {
 		
 		case STAGE_WAIT:			
 			if ( wsfl.lowerWeapon ) {
+				// this is when they put the weapon away
 				SetState ( "Lower", 4 );
 				return SRESULT_DONE;
 			}		
@@ -234,7 +235,7 @@ stateResult_t rvWeaponMachinegun::State_Fire ( const stateParms_t& parms ) {
 		case STAGE_INIT:
 			if ( wsfl.zoom ) {
 				nextAttackTime = gameLocal.time + (altFireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
-				Attack ( true, 2, 3.3f, 0, 1.0f ); // the defualt of the 2nd parameter is 1 for when zoomed in
+				Attack ( true, 1, 3.3f, 0, 1.0f ); // the defualt of the 2nd parameter is 1 for when zoomed in
 				
 														
 				fireHeld = true;

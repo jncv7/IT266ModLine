@@ -8685,6 +8685,8 @@ void idPlayer::EvaluateControls( void ) {
 ==============
 idPlayer::AdjustSpeed
 ==============
+
+ ------------------> this is what chnecks and adjust the speed of the character?
 */
 void idPlayer::AdjustSpeed( void ) {
 	float speed;
@@ -8708,6 +8710,21 @@ void idPlayer::AdjustSpeed( void ) {
 	if ( influenceActive == INFLUENCE_LEVEL3 ) {
 		speed *= 0.33f;
 	}
+
+
+
+
+	// here you need to check if the player is holding a gun 
+	// and then change the speed based on the gun the player is holding.
+
+
+	// --> speed change here
+	// the question is, how do you know when a weapon is being held? is there a predicate for it? or is there a pointer?
+
+
+
+
+	
 
 	physicsObj.SetSpeed( speed, pm_crouchspeed.GetFloat() );
 }

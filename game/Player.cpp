@@ -3420,6 +3420,20 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 
 	assert ( _hud );
 
+	// jncv7
+
+	// best time is the difference of the start and stop time 
+
+	bestTime = savedStopTime - savedStartTime;
+
+	// do not show negative time
+	if (bestTime < 0){
+		bestTime = 0;
+	}
+
+	char buff[100];
+	sprintf_s(buff, "time: %i", bestTime);
+	_hud->SetStateString("player_bestTime", buff);
 
 
 
@@ -3466,20 +3480,7 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	if ( weapon ) {
 		UpdateHudAmmo( _hud );
 	}
-	// jncv7
 
-	// best time is the difference of the start and stop time 
-
-	bestTime = savedStopTime - savedStartTime;
-
-	// do not show negative time
-	if (bestTime < 0){
-		bestTime = 0;
-	}
-
-	char buff[100];
-	sprintf_s(buff, "time: %i", bestTime);
-	_hud->SetStateString("player_bestTime", buff);
 
 	_hud->StateChanged( gameLocal.time );
 }
@@ -4805,21 +4806,11 @@ bool idPlayer::GivePowerUp( int powerup, int time, bool team ) {
 		}
 
 		// putting the custom made powerdown here
+		case POWERUP_BUTTKICK:{
 
-		// rip your health
-		case POWERDOWN_DIEDIEDIE: {
-			inventory.maxHealth = inventory.maxHealth - 40;
-			break;
+								  break;
 		}
-
-		// rip your armor
-
-		case POWERDOWN_NOARMOR4U: {
-			inventory.maxarmor -= 40;
-			break;
-		}
-
-
+		
 
 
 
@@ -9017,12 +9008,15 @@ void idPlayer::AdjustSpeed( void ) {
 		speed = 10.0f;
 		// they have to scope in to move faster
 		pm_isZoomed.SetFloat(101.1f);
+		// you can crouch tho LOL
+		// pm_crouchrate.SetFloat(1.51f);
 		
 	}
 
 	// if the gun is a shotgun
 	if (currentWeapon == 2){
 		speed = 590.0f;
+	//	pm_walkbob.SetFloat(.77f);
 		
 	}
 
@@ -9051,6 +9045,8 @@ void idPlayer::AdjustSpeed( void ) {
 		speed = 900.3f;
 		// jump too high ... its like you got too sensitive KEK
 		jumpHeight = 200.1f;
+		// mess with the bobing too ....
+	//	pm_runbob.SetFloat(1.1f);
 	}
 
 

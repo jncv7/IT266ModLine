@@ -280,6 +280,10 @@ stateResult_t rvWeaponBlaster::State_Lower ( const stateParms_t& parms ) {
 		case LOWER_INIT:
 			// gameLocal.Printf("You put the blaster away");
 			// this is where in the weapons files that the gun is put away. 
+			
+			// PUT THE POWER UP HWEW> 
+			// THIS SORTA MAKES IT TRIGGER ON F
+			// INSTEAD OF MAKING IMPULSE TAKE CARE OF IT
 			SetStatus ( WP_LOWERING );
 			PlayAnim( ANIMCHANNEL_ALL, "putaway", parms.blendFrames );
 			return SRESULT_STAGE(LOWER_WAIT);
