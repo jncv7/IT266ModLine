@@ -1,4 +1,4 @@
-THIS IS MY PROJECT
+IT 266 MOD PROJECT
 =================
 
 this is a file for the README in IT266  
