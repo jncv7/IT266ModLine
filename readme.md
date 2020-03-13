@@ -32,7 +32,7 @@ Here are the changes to the game:
         * click ] to stop the clock
 
 
-How to play: 
+    How to play: 
     
     * You will spawn into the map, press "[" to start the timer.
     * you can play with some of the pick ups that are in the start of the map to get used to it 
