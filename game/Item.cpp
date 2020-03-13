@@ -628,21 +628,21 @@ bool idItem::GiveToPlayer( idPlayer *player ) {
 	
 	// small health boost changes
 	// kills max hp
-	if (idStr::Icmpn(name, "item_health_small_moveable", 26) == 0){
+	if (idStr::Icmpn(name, "item_health_small", 17) == 0){
 		gameLocal.Printf(" - You picked up a small health boost - ");
 		 player->GivePowerUp(POWERUP_AMMOREGEN, SEC2MS(5.0f));
 	}
 
 	// large health boost changes
 	// move a tad faster
-	if (idStr::Icmpn(name, "item_health_large_moveable", 26) == 0){
+	if (idStr::Icmpn(name, "item_health_large", 17) == 0){
 		gameLocal.Printf(" - You picked up a large health boost -");
 		player->GivePowerUp(POWERUP_REGENERATION, SEC2MS(5.0f));
 	}
 
 	// small armor boost changes
 	// kills max armor
-	if (idStr::Icmpn(name, "item_armor_small_moveable", 25) == 0){
+	if (idStr::Icmpn(name, "item_armor_small", 16) == 0){
 		gameLocal.Printf("  -You picked up a small armor boost - ");
 		player->GivePowerUp(POWERUP_SCOUT, SEC2MS(3.0f));
 	}
@@ -652,7 +652,7 @@ bool idItem::GiveToPlayer( idPlayer *player ) {
 	// but you move fast
 	// good luck you glass cannon
 
-	if (idStr::Icmpn(name, "item_armor_large_moveable", 25) == 0){
+	if (idStr::Icmpn(name, "item_armor_large", 16) == 0){
 		gameLocal.Printf("- You picked up a large armor boost -");
 		player->GivePowerUp(POWERUP_QUADDAMAGE, SEC2MS(5.0f));
 

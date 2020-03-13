@@ -3432,7 +3432,7 @@ void idPlayer::UpdateHudStats( idUserInterface *_hud ) {
 	}
 
 	char buff[100];
-	sprintf_s(buff, "time: %i", bestTime);
+	sprintf_s(buff, "Your Time: %i", bestTime);
 	_hud->SetStateString("player_bestTime", buff);
 
 
@@ -8602,8 +8602,8 @@ void idPlayer::PerformImpulse( int impulse ) {
 		//	gameLocal.Printf("This is the start time: ");
 		//	gameLocal.Printf("%d", startTime);
 
-			gameLocal.Printf(" The is the converted time: -->");
-			gameLocal.Printf("%d", convertedTime);
+			//gameLocal.Printf(" The is the converted time: -->");
+		//	gameLocal.Printf("%d", convertedTime);
 
 			savedStartTime = convertedTime;
 
@@ -8612,17 +8612,27 @@ void idPlayer::PerformImpulse( int impulse ) {
 			///////////////////////////////////////////////////
 			// jncv7
 
+			int fileTime = 0;
+
 			FILE * pFile;
 
 			// make a file to write
 			pFile = fopen("startTime.txt", "r+");
 
-			// write the number in there
+			
+
+			//fscanf(pFile, "%i", fileTime);
+
 			fprintf(pFile, "%i", convertedTime);
+			 gameLocal.Printf("%d", fileTime);
 
-
-			gameLocal.Printf("start Time has been saved");
+	//		lastStartTime = fileTime;
 			fclose(pFile);
+
+		//	gameLocal.Printf("%i", lastStartTime);
+
+			
+
 
 
 
@@ -8636,6 +8646,8 @@ void idPlayer::PerformImpulse( int impulse ) {
 			// if( gameLocal.isServer && spectating && gameLocal.gameType == GAME_TOURNEY ) {	
 			//	((rvTourneyGameState*)gameLocal.mpGame.GetGameState())->SpectateCycleNext( this );
 			//}
+
+			// end of imputlse 14
 			break;
 		}
 		case IMPULSE_15: {
@@ -8653,7 +8665,7 @@ void idPlayer::PerformImpulse( int impulse ) {
 
 							 FILE * pFile;
 							 
-							 pFile = fopen("stopTime.txt", "r+");
+							 pFile = fopen("bestTimes.txt", "r+");
 
 							 // if the file has a thing inside of it, go to the next line and write there
 
@@ -8665,7 +8677,7 @@ void idPlayer::PerformImpulse( int impulse ) {
 
 							fclose(pFile);
 
-							
+							gameLocal.Printf("We saved the time");
 
 
 

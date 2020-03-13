@@ -878,9 +878,15 @@ private:
 	bool					weaponEnabled;
  	bool					showWeaponViewModel;
 	// jncv7
+
+	// recording the current times
 	int							bestTime;
 	int							savedStartTime;
 	int							savedStopTime;
+
+	// recording the times from the files for comparison with the current times
+	int	lastStartTime;
+	int lastBestTime;
 
 	rvClientEntityPtr<rvClientAFAttachment>	clientHead;
 // RAVEN BEGIN
