@@ -1,4 +1,4 @@
-IT 266 MOD PROJECT
+IT 266 MOD PROJECT - JOHN VISITACION
 =================
 
 this is a file for the README in IT266  
