@@ -30,3 +30,12 @@ Here are the changes to the game:
     4. there is a start time and a stop time clock
         * click [ to begin the clock
         * click ] to stop the clock
+
+
+How to play: 
+    
+    * You will spawn into the map, press "[" to start the timer.
+    * you can play with some of the pick ups that are in the start of the map to get used to it 
+     * your goal is to get to the ending of the map and press "]" to end the said timer
+    *TIPS: Be careful of what guns you use and when, because each gun does something different to how you move
+        * and how you move is vital to how fast you can finish!
